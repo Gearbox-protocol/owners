@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@gearbox-protocol/sdk": "^3.0.0-next.125",
+    "@gearbox-protocol/periphery-v3": "^1.6.1",
+    "@gearbox-protocol/sdk": "^3.0.0-next.143",
     "@gearbox-protocol/sdk-gov": "^1.32.0",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.11.19",

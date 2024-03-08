@@ -19,8 +19,8 @@ export class CreditManager {
     this.creditManager = creditManager;
   }
 
-  getOwner(creditAccount: Address, block: number): Address {
-    const owners = this.#owners[creditAccount];
+  getOwner(creditAccount: Address, block: number, balance: bigint): Address {
+    const owners = this.#owners[creditAccount.toLowerCase()];
     if (!owners) {
       throw new Error(
         `Credit account ${creditAccount} does not have any owners`
@@ -28,12 +28,13 @@ export class CreditManager {
     }
 
     const owner = owners.find((o) => {
-      return o.since <= block && (o.till === undefined || o.till > block);
+      return o.since <= block && (o.till === undefined || o.till >= block);
     });
 
     if (!owner) {
+      console.log(owners);
       throw new Error(
-        `Credit account ${creditAccount} does not have an owner at block ${block}`
+        `Credit account ${creditAccount} does not have an owner at block ${block} ${balance}`
       );
     }
 
@@ -117,11 +118,11 @@ export class CreditManager {
     owner: string,
     since: number
   ): void {
-    if (!this.#owners[creditAccount]) {
-      this.#owners[creditAccount] = [];
+    if (!this.#owners[creditAccount.toLowerCase()]) {
+      this.#owners[creditAccount.toLowerCase()] = [];
     }
 
-    this.#owners[creditAccount].push(new Owner(owner, since));
+    this.#owners[creditAccount.toLowerCase()].push(new Owner(owner, since));
   }
 
   #closeCreditAccount(
@@ -129,7 +130,7 @@ export class CreditManager {
     owner: string,
     till: number
   ): void {
-    const ownerAccounts = this.#owners[creditAccount];
+    const ownerAccounts = this.#owners[creditAccount.toLowerCase()];
     if (!ownerAccounts) {
       throw new Error(`Owner ${owner} does not have any credit accounts`);
     }
